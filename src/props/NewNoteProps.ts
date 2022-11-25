@@ -1,8 +1,9 @@
-import OnNoteSubmit from "../types";
+import { OnNoteSubmit, OnCreateTag, Tag } from "../types";
 
 type NewNoteProps = {
   onSubmit: OnNoteSubmit;
-  onCreateTag: (tag: Tag) => void;
+  onCreateTag: OnCreateTag;
+  tags: Tag[];
 };
 
 export default NewNoteProps;

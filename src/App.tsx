@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { NewNote } from "./NewNote";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { NoteData, RawNote, Tag } from "./types";
 import { v4 as uuidV4 } from "uuid";
+import { NewNote } from "./components";
 
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
@@ -42,7 +42,13 @@ function App() {
         <Route path="/" element={<h1>Home page</h1>} />
         <Route
           path="/new"
-          element={<NewNote onSubmit={createNote} onCreateTag={createTag} />}
+          element={
+            <NewNote
+              onSubmit={createNote}
+              onCreateTag={createTag}
+              tags={tags}
+            />
+          }
         />
         <Route path="/:id">
           <Route index element={<h1>Show</h1>} />
