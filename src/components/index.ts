@@ -1,3 +1,4 @@
+export { default as CreateableSelect } from "./CreatableSelect/CreatableSelect";
 export { default as EditNote } from "./EditNote/EditNote";
 export { default as EditTagsModal } from "./EditTagsModal/EditTagsModal";
 export { default as NewNote } from "./NewNote/NewNote";
