@@ -13,9 +13,7 @@ export default function CreatableSelect({
 
   return (
     <CreatableReactSelect
-      onCreateOption={(label) => {
-        onCreateTag({ value: uuidV4(), label });
-      }}
+      onCreateOption={(label) => onCreateTag({ value: uuidV4(), label })}
       value={selectedTags}
       onChange={(tags) => onChange(tags as Mutable<Tag[]>)}
       options={allTags}

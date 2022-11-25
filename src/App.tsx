@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { useLocalStorage } from "./hooks";
+import { useLocalStorage, useNotesWithTags } from "./hooks";
 import { NoteData, RawNote, Tag } from "./types";
 import { v4 as uuidV4 } from "uuid";
 import { EditNote, NewNote, NoteLayout, NoteList, Note } from "./components";
@@ -12,17 +12,9 @@ function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
 
-  // const tags = useContext(TagsContext);
+  const notesWithTags = useNotesWithTags(notes, tags);
 
-  const notesWithTags = useMemo(() => {
-    return notes.map((note) => {
-      return {
-        ...note,
-        tags: tags.filter((tag) => note.tagValues.includes(tag.value)),
-      };
-    });
-  }, [notes, tags]);
-
+  // Notes controllers
   function createNote({ tags, ...data }: NoteData) {
     const newRawNote = {
       id: uuidV4(),
@@ -50,6 +42,7 @@ function App() {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
 
+  // Tag controllers
   function createTag(newTag: Tag) {
     setTags((prevTags) => [...prevTags, newTag]);
   }
@@ -73,6 +66,7 @@ function App() {
     <TagsContext.Provider value={tags}>
       <Container className="my-4">
         <Routes>
+          {/* Index route with note list */}
           <Route
             index
             element={
@@ -84,12 +78,19 @@ function App() {
               />
             }
           />
+
+          {/* Route for creating new note */}
           <Route
             path="/new"
             element={<NewNote onSubmit={createNote} onCreateTag={createTag} />}
           />
+
+          {/* Routes with id parameter */}
           <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+            {/* Route for showing note */}
             <Route index element={<Note onDelete={deleteNote} />} />
+
+            {/* Route for editing note */}
             <Route
               path="edit"
               element={
@@ -97,6 +98,8 @@ function App() {
               }
             ></Route>
           </Route>
+
+          {/* Not found route */}
           <Route path="*" element={<Navigate to="/" />}></Route>
         </Routes>
       </Container>
