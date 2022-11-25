@@ -2,18 +2,25 @@ import { FormEvent, useRef, useState } from "react";
 import { Form, Stack, Row, Col, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
-import { NoteFormProps } from "../types";
-import { Tag } from "../types";
+import { Mutable, NoteFormProps } from "../../types";
+import { Tag } from "../../types";
 import { v4 as uuidV4 } from "uuid";
+import Select from "../CreatableSelect/CreatableSelect";
+import CreatableSelect from "../CreatableSelect/CreatableSelect";
 
 export default function NoteForm({
   onSubmit,
   onCreateTag,
-  tags,
+  allTags,
+  note: { title, markdown, tags } = {
+    title: "",
+    markdown: "",
+    tags: [],
+  },
 }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
@@ -28,38 +35,36 @@ export default function NoteForm({
     navigate("..");
   }
 
+  function handleSelectChange(tags: Tag[]) {
+    setSelectedTags(tags);
+  }
+
+  function handleCreateTag(newTag: Tag) {
+    setSelectedTags((prevTags) => [...prevTags, newTag]);
+    onCreateTag(newTag);
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
         <Row>
           <Col>
             <Form.Group controlId="title">
-              <Form.Control placeholder="Title" ref={titleRef} required />
+              <Form.Control
+                placeholder="Title"
+                ref={titleRef}
+                required
+                defaultValue={title}
+              />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="tags">
-              <CreatableReactSelect
-                onCreateOption={(label) => {
-                  const newTag = { id: uuidV4(), label };
-                  onCreateTag(newTag);
-                  setSelectedTags((prevTags) => [...prevTags, newTag]);
-                }}
-                value={selectedTags.map(({ label, id }) => {
-                  return { label, value: id };
-                })}
-                onChange={(tags) => {
-                  setSelectedTags(
-                    tags.map(({ label, value }) => {
-                      return { label, id: value };
-                    })
-                  );
-                }}
-                options={tags.map(({ label, id }) => {
-                  return { label, value: id };
-                })}
-                placeholder="Tags"
-                isMulti
+              <CreatableSelect
+                allTags={allTags}
+                selectedTags={selectedTags}
+                onChange={handleSelectChange}
+                onCreateTag={handleCreateTag}
               />
             </Form.Group>
           </Col>
@@ -71,6 +76,7 @@ export default function NoteForm({
             as="textarea"
             rows={15}
             ref={markdownRef}
+            defaultValue={markdown}
           />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">

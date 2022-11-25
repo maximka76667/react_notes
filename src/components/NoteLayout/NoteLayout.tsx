@@ -1,14 +1,5 @@
-import {
-  Navigate,
-  Outlet,
-  useOutletContext,
-  useParams,
-} from "react-router-dom";
-import { Note } from "../types";
-
-type NoteLayoutProps = {
-  notes: Note[];
-};
+import { Navigate, Outlet, useParams } from "react-router-dom";
+import { NoteLayoutProps } from "../../types";
 
 export default function NoteLayout({ notes }: NoteLayoutProps) {
   const { id } = useParams();

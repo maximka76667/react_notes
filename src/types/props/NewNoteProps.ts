@@ -3,7 +3,7 @@ import { OnNoteSubmit, OnCreateTag, Tag } from "..";
 type NewNoteProps = {
   onSubmit: OnNoteSubmit;
   onCreateTag: OnCreateTag;
-  tags: Tag[];
+  allTags: Tag[];
 };
 
 export default NewNoteProps;

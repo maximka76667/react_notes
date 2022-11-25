@@ -1,7 +1,7 @@
 import NoteData from "./NoteData";
 
 type RawNoteData = Omit<NoteData, "tags"> & {
-  tagIds: string[];
+  tagValues: string[];
 };
 
 export default RawNoteData;

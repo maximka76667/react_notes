@@ -1,9 +1,10 @@
-import { OnCreateTag, OnNoteSubmit, Tag } from "..";
+import { OnCreateTag, OnNoteSubmit, Tag, NoteData } from "..";
 
 type NoteFormProps = {
   onSubmit: OnNoteSubmit;
   onCreateTag: OnCreateTag;
-  tags: Tag[];
+  allTags: Tag[];
+  note?: NoteData;
 };
 
 export default NoteFormProps;
