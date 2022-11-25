@@ -6,11 +6,7 @@ type EditNoteProps = Omit<NewNoteProps, "onSubmit"> & {
   onSubmit: (id: string, data: NoteData) => void;
 };
 
-export default function EditNote({
-  onSubmit,
-  onCreateTag,
-  allTags,
-}: EditNoteProps) {
+export default function EditNote({ onSubmit, onCreateTag }: EditNoteProps) {
   const { id, title, markdown, tags } = useNote();
   return (
     <>
@@ -19,7 +15,6 @@ export default function EditNote({
         note={{ title, markdown, tags }}
         onSubmit={(data) => onSubmit(id, data)}
         onCreateTag={onCreateTag}
-        allTags={allTags}
       />
     </>
   );

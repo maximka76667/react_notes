@@ -1,17 +1,14 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { Form, Stack, Row, Col, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import CreatableReactSelect from "react-select/creatable";
-import { Mutable, NoteFormProps } from "../../types";
+import { NoteFormProps } from "../../types";
 import { Tag } from "../../types";
-import { v4 as uuidV4 } from "uuid";
-import Select from "../CreatableSelect/CreatableSelect";
 import CreatableSelect from "../CreatableSelect/CreatableSelect";
+import TagsContext from "../../contexts/TagsContext";
 
 export default function NoteForm({
   onSubmit,
   onCreateTag,
-  allTags,
   note: { title, markdown, tags } = {
     title: "",
     markdown: "",
@@ -61,7 +58,6 @@ export default function NoteForm({
           <Col>
             <Form.Group controlId="tags">
               <CreatableSelect
-                allTags={allTags}
                 selectedTags={selectedTags}
                 onChange={handleSelectChange}
                 onCreateTag={handleCreateTag}

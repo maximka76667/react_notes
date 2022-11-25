@@ -1,15 +1,14 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { Form, Button, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { Tag, NoteListProps } from "../../types";
 import NoteCard from "../NoteCard/NoteCard";
 import EditTagsModal from "../EditTagsModal/EditTagsModal";
-import useFilteredNotes from "../../hooks/useFilteredNotes";
+import { useFilteredNotes } from "../../hooks";
 import Select from "../CreatableSelect/CreatableSelect";
 
 export default function NoteList({
-  allTags,
   onCreateTag,
   notes,
   onUpdateTag,
@@ -73,7 +72,6 @@ export default function NoteList({
           <Col>
             <Form.Group controlId="tags"></Form.Group>
             <Select
-              allTags={allTags}
               onCreateTag={handleCreateTag}
               selectedTags={selectedTags}
               onChange={handleSelectChange}
@@ -89,7 +87,6 @@ export default function NoteList({
         ))}
       </Row>
       <EditTagsModal
-        allTags={allTags}
         show={isEditTagsModalOpen}
         handleClose={() => setIsEditTagsModalOpen(false)}
         onUpdateTag={onUpdateTag}

@@ -1,13 +1,16 @@
+import { useContext } from "react";
 import { Button, Col, Form, Modal, Row, Stack } from "react-bootstrap";
+import TagsContext from "../../contexts/TagsContext";
 import { EditTagsModalProps } from "../../types";
 
 export default function EditTagsModal({
-  allTags,
   show,
   handleClose,
   onDeleteTag,
   onUpdateTag,
 }: EditTagsModalProps) {
+  const allTags = useContext(TagsContext);
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

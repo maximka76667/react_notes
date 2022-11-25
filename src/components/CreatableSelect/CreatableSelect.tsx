@@ -1,13 +1,16 @@
 import { Mutable, SelectProps, Tag } from "../../types";
 import CreatableReactSelect from "react-select/creatable";
 import { v4 as uuidV4 } from "uuid";
+import { useContext } from "react";
+import TagsContext from "../../contexts/TagsContext";
 
 export default function CreatableSelect({
-  allTags,
   selectedTags,
   onCreateTag,
   onChange,
 }: SelectProps) {
+  const allTags = useContext(TagsContext);
+
   return (
     <CreatableReactSelect
       onCreateOption={(label) => {

@@ -5,12 +5,14 @@ import { Container } from "react-bootstrap";
 import { useLocalStorage } from "./hooks";
 import { NoteData, RawNote, Tag } from "./types";
 import { v4 as uuidV4 } from "uuid";
-import { EditNote, NewNote, NoteLayout, NoteList } from "./components";
-import { Note } from "./components";
+import { EditNote, NewNote, NoteLayout, NoteList, Note } from "./components";
+import TagsContext from "./contexts/TagsContext";
 
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+
+  // const tags = useContext(TagsContext);
 
   const notesWithTags = useMemo(() => {
     return notes.map((note) => {
@@ -48,6 +50,10 @@ function App() {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   }
 
+  function createTag(newTag: Tag) {
+    setTags((prevTags) => [...prevTags, newTag]);
+  }
+
   function updateTag(value: string, label: string) {
     setTags((prevTags) => {
       return prevTags.map((tag) => {
@@ -60,54 +66,41 @@ function App() {
   }
 
   function deleteTag(value: string) {
-    setTags((prevNotes) => prevNotes.filter((note) => note.value !== value));
-  }
-
-  function createTag(newTag: Tag) {
-    setTags((prev) => [...prev, newTag]);
+    setTags((prevTags) => prevTags.filter((tag) => tag.value !== value));
   }
 
   return (
-    <Container className="my-4">
-      <Routes>
-        <Route
-          index
-          element={
-            <NoteList
-              allTags={tags}
-              onCreateTag={createTag}
-              notes={notesWithTags}
-              onUpdateTag={updateTag}
-              onDeleteTag={deleteTag}
-            />
-          }
-        />
-        <Route
-          path="/new"
-          element={
-            <NewNote
-              onSubmit={createNote}
-              onCreateTag={createTag}
-              allTags={tags}
-            />
-          }
-        />
-        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Note onDelete={deleteNote} />} />
+    <TagsContext.Provider value={tags}>
+      <Container className="my-4">
+        <Routes>
           <Route
-            path="edit"
+            index
             element={
-              <EditNote
-                onSubmit={updateNote}
+              <NoteList
                 onCreateTag={createTag}
-                allTags={tags}
+                notes={notesWithTags}
+                onUpdateTag={updateTag}
+                onDeleteTag={deleteTag}
               />
             }
-          ></Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" />}></Route>
-      </Routes>
-    </Container>
+          />
+          <Route
+            path="/new"
+            element={<NewNote onSubmit={createNote} onCreateTag={createTag} />}
+          />
+          <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+            <Route index element={<Note onDelete={deleteNote} />} />
+            <Route
+              path="edit"
+              element={
+                <EditNote onSubmit={updateNote} onCreateTag={createTag} />
+              }
+            ></Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/" />}></Route>
+        </Routes>
+      </Container>
+    </TagsContext.Provider>
   );
 }
 
