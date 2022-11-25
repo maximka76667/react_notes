@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 
-export function useLocalStorage<T extends any[]>(
+export default function useLocalStorage<T extends any[]>(
   key: string,
   initialValue: T | (() => T)
 ) {

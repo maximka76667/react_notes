@@ -6,3 +6,5 @@ export type { default as OnNoteSubmit } from "./OnNoteSubmit";
 export type { default as RawNote } from "./RawNote";
 export type { default as RawNoteData } from "./RawNoteData";
 export type { default as Tag } from "./Tag";
+export type { default as NoteFormProps } from "./props/NoteFormProps";
+export type { default as NewNoteProps } from "./props/NewNoteProps";

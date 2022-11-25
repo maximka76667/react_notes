@@ -1,4 +1,4 @@
-import { NewNoteProps } from "../props";
+import { NewNoteProps } from "../types";
 import NoteForm from "./NoteForm";
 
 export default function NewNote({ onSubmit, onCreateTag, tags }: NewNoteProps) {

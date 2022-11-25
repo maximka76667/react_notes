@@ -1,4 +1,4 @@
-import { OnCreateTag, OnNoteSubmit, Tag } from "../types";
+import { OnCreateTag, OnNoteSubmit, Tag } from "..";
 
 type NoteFormProps = {
   onSubmit: OnNoteSubmit;
