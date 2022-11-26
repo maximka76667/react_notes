@@ -5,6 +5,7 @@ import { NoteFormProps } from "../../types";
 import { Tag } from "../../types";
 import CreatableSelect from "../CreatableSelect/CreatableSelect";
 import TagsContext from "../../contexts/TagsContext";
+import ReactMarkdown from "react-markdown";
 
 export default function NoteForm({
   onSubmit,
@@ -16,16 +17,17 @@ export default function NoteForm({
   },
 }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
-  const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   const navigate = useNavigate();
+
+  const [markdownState, setMarkdownState] = useState(markdown);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     onSubmit({
       title: titleRef.current!.value,
-      markdown: markdownRef.current!.value,
+      markdown: markdownState,
       tags: selectedTags,
     });
 
@@ -44,7 +46,7 @@ export default function NoteForm({
   return (
     <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
-        <Row>
+        <Row className="mb-4">
           <Col>
             <Form.Group controlId="title">
               <Form.Control
@@ -65,16 +67,31 @@ export default function NoteForm({
             </Form.Group>
           </Col>
         </Row>
+
         <Form.Group controlId="markdown">
-          <Form.Control
-            placeholder="e.g. Buy some chocolate..."
-            required
-            as="textarea"
-            rows={15}
-            ref={markdownRef}
-            defaultValue={markdown}
-          />
+          <Row xs={1} lg={2}>
+            <Col className="mb-4">
+              <h2 className="fs-6 mb-3 d-inline-block bg-light rounded p-2">
+                Markdown
+              </h2>
+              <Form.Control
+                placeholder="e.g. Buy some chocolate..."
+                required
+                as="textarea"
+                rows={10}
+                value={markdownState}
+                onChange={(e) => setMarkdownState(e.target.value)}
+              />
+            </Col>
+            <Col>
+              <h2 className="fs-6 mb-3 d-inline-block bg-light rounded p-2">
+                Preview
+              </h2>
+              <ReactMarkdown>{markdownState}</ReactMarkdown>
+            </Col>
+          </Row>
         </Form.Group>
+
         <Stack direction="horizontal" gap={2} className="justify-content-end">
           <Button type="submit" variant="primary">
             Save

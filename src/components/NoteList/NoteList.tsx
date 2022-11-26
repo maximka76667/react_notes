@@ -52,7 +52,7 @@ export default function NoteList({
               variant="outline-secondary"
               type="button"
             >
-              Edit tags
+              Tag manager
             </Button>
           </Stack>
         </Col>
